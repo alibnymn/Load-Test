@@ -1,0 +1,141 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Performance QA Detailed Report</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --blue: #58a6ff; --green: #3fb950; --yellow: #d29922; --red: #f85149; }
+            body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px 20px; line-height: 1.6; }
+            .container { max-width: 1000px; margin: auto; }
+            
+            /* Header */
+            .header { text-align: center; margin-bottom: 30px; }
+            .header h1 { font-size: 22px; color: #f0f6fc; margin-bottom: 10px; text-transform: uppercase; }
+            .url-badge { display: inline-block; background: #0f1d31; border: 1px solid var(--blue); color: var(--blue); padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 13px; }
+
+            /* Load Summary Section (Artillery Style) */
+            .load-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 25px; }
+            .load-box { background: var(--card); padding: 20px; text-align: center; }
+            .load-box .l-val { font-size: 28px; font-weight: 700; color: #f0f6fc; display: block; }
+            .load-box .l-lbl { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.5px; }
+
+            /* Section Styling */
+            .section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+            .section-title { font-size: 14px; font-weight: 700; margin-bottom: 20px; color: var(--blue); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+            .section-title::before { content: ""; width: 3px; height: 14px; background: var(--blue); border-radius: 10px; }
+
+            /* Metrics Grid */
+            .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .m-card { background: #0d1117; border: 1px solid var(--border); padding: 15px; border-radius: 8px; }
+            .m-label { font-size: 10px; color: #8b949e; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
+            .m-value { font-size: 20px; font-weight: 700; color: #f0f6fc; }
+            .m-unit { font-size: 12px; color: #8b949e; margin-left: 3px; }
+
+            /* Glossary Table */
+            .glossary-table { width: 100%; border-collapse: collapse; font-size: 13px; color: #8b949e; }
+            .glossary-table td { padding: 10px; border-bottom: 1px solid #21262d; }
+            .glossary-table b { color: var(--blue); }
+            
+            canvas { width: 100% !important; max-height: 250px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚀 Performance Load Test Report</h1>
+                <div class="url-badge">http://192.168.0.14:21210/Login</div>
+            </div>
+
+            <div class="load-summary">
+                <div class="load-box">
+                    <span class="l-val">120</span>
+                    <span class="l-lbl">VUsers Created</span>
+                </div>
+                <div class="load-box">
+                    <span class="l-val" style="color: var(--green)">98.33%</span>
+                    <span class="l-lbl">Success Rate</span>
+                </div>
+                <div class="load-box">
+                    <span class="l-val">3.3</span>
+                    <span class="l-lbl">Avg Req/s</span>
+                </div>
+                <div class="load-box">
+                    <span class="l-val">128.6</span>
+                    <span class="l-lbl">Peak Req/s</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Detailed Latency Metrics (FCP)</div>
+                <div class="metrics-grid">
+                    <div class="m-card"><div class="m-label">Minimum</div><div class="m-value">15736<span class="m-unit">ms</span></div></div>
+                    <div class="m-card"><div class="m-label">Average (Mean)</div><div class="m-value" style="color: var(--blue)">56968.2<span class="m-unit">ms</span></div></div>
+                    <div class="m-card"><div class="m-label">Maximum</div><div class="m-value">505748<span class="m-unit">ms</span></div></div>
+                    
+                    <div class="m-card"><div class="m-label">p95 (95th %)</div><div class="m-value" style="color: var(--yellow)">56972<span class="m-unit">ms</span></div></div>
+                    <div class="m-card"><div class="m-label">p99 (99th %)</div><div class="m-value" style="color: var(--red)">504028.3<span class="m-unit">ms</span></div></div>
+                    <div class="m-card"><div class="m-label">Failed Users</div><div class="m-value" style="color: var(--red)">0</div></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Latency Trend (p95)</div>
+                <canvas id="latencyChart"></canvas>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Throughput Trend (RPS)</div>
+                <canvas id="rpsChart"></canvas>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Metric Definitions</div>
+                <table class="glossary-table">
+                    <tr><td><b>VUsers Created</b></td><td>Total simulasi pengguna unik yang dibuat selama durasi test.</td></tr>
+                    <tr><td><b>Avg Req/s</b></td><td>Rata-rata jumlah request HTTP yang berhasil dikirimkan per detik.</td></tr>
+                    <tr><td><b>Peak Req/s</b></td><td>Titik tertinggi jumlah request per detik yang dicapai selama pengujian.</td></tr>
+                    <tr><td><b>p95 Latency</b></td><td>95% request memiliki waktu respon lebih cepat dari nilai ini (Standar utama performa).</td></tr>
+                    <tr><td><b>FCP (First Contentful Paint)</b></td><td>Waktu yang dibutuhkan browser untuk merender konten pertama di layar.</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            const setupChart = (id, data, color, label) => {
+                const ctx = document.getElementById(id).getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["10s","20s","30s","40s","50s","60s","70s","80s","90s","100s","110s","120s"],
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            borderColor: color,
+                            backgroundColor: color.replace('1)', '0.1)'),
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: '#21262d' }, ticks: { color: '#8b949e' } },
+                            x: { grid: { display: false }, ticks: { color: '#8b949e' } }
+                        }
+                    }
+                });
+            };
+
+            setupChart('latencyChart', [0,0,0,0,30647.1,45720.8,43928,41369.7,50529.4,0,0,504028.3], 'rgba(210, 153, 34, 1)', 'Latency p95');
+            setupChart('rpsChart', ["0.0","0.0","0.0","95.6","128.6","90.3","91.2","53.0","35.9","3.8","0.6","94.7"], 'rgba(88, 166, 255, 1)', 'Requests/s');
+        </script>
+    </body>
+    </html>
+    

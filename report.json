@@ -1,0 +1,1048 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.0": 120,
+      "vusers.created": 120,
+      "browser.page.codes.200": 5956,
+      "browser.http_requests": 5937,
+      "percobaan_login": 34,
+      "login_gagal_timeout": 101,
+      "vusers.failed": 0,
+      "vusers.completed": 118
+    },
+    "rates": {},
+    "firstCounterAt": 1776409266043,
+    "firstHistogramAt": 1776409304953,
+    "lastCounterAt": 1776409813910,
+    "lastHistogramAt": 1776409813910,
+    "firstMetricAt": 1776409266043,
+    "lastMetricAt": 1776409813910,
+    "period": 1776409810000,
+    "summaries": {
+      "browser.page.FCP.http://192.168.0.14:21210/Login": {
+        "min": 15736,
+        "max": 505748,
+        "count": 42,
+        "mean": 56968.2,
+        "p50": 37432.7,
+        "median": 37432.7,
+        "p75": 43928,
+        "p90": 50529.4,
+        "p95": 56972,
+        "p99": 504028.3,
+        "p999": 504028.3
+      },
+      "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+        "min": 37.9,
+        "max": 26419.1,
+        "count": 46,
+        "mean": 7902.4,
+        "p50": 1720.2,
+        "median": 1720.2,
+        "p75": 15839.7,
+        "p90": 22703.7,
+        "p95": 24594.7,
+        "p99": 25598.5,
+        "p999": 25598.5
+      },
+      "browser.page.LCP.http://192.168.0.14:21210/Login": {
+        "min": 16624,
+        "max": 71768,
+        "count": 40,
+        "mean": 40262.3,
+        "p50": 40550.5,
+        "median": 40550.5,
+        "p75": 59297.1,
+        "p90": 61717.2,
+        "p95": 61717.2,
+        "p99": 61717.2,
+        "p999": 61717.2
+      },
+      "browser.page.INP.http://192.168.0.14:21210/Login": {
+        "min": 8472,
+        "max": 469872,
+        "count": 34,
+        "mean": 58104,
+        "p50": 20958.1,
+        "median": 20958.1,
+        "p75": 20958.1,
+        "p90": 27181.5,
+        "p95": 465275.5,
+        "p99": 465275.5,
+        "p999": 465275.5
+      },
+      "browser.page.CLS.http://192.168.0.14:21210/Login": {
+        "min": 0,
+        "max": 0,
+        "count": 46,
+        "mean": 0,
+        "p50": 0,
+        "median": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0,
+        "p999": 0
+      },
+      "vusers.session_length": {
+        "min": 47122.9,
+        "max": 546466.8,
+        "count": 118,
+        "mean": 458957.2,
+        "p50": 504028.3,
+        "median": 504028.3,
+        "p75": 514210.7,
+        "p90": 535196.7,
+        "p95": 535196.7,
+        "p99": 546008.8,
+        "p999": 546008.8
+      }
+    },
+    "histograms": {
+      "browser.page.FCP.http://192.168.0.14:21210/Login": {
+        "min": 15736,
+        "max": 505748,
+        "count": 42,
+        "mean": 56968.2,
+        "p50": 37432.7,
+        "median": 37432.7,
+        "p75": 43928,
+        "p90": 50529.4,
+        "p95": 56972,
+        "p99": 504028.3,
+        "p999": 504028.3
+      },
+      "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+        "min": 37.9,
+        "max": 26419.1,
+        "count": 46,
+        "mean": 7902.4,
+        "p50": 1720.2,
+        "median": 1720.2,
+        "p75": 15839.7,
+        "p90": 22703.7,
+        "p95": 24594.7,
+        "p99": 25598.5,
+        "p999": 25598.5
+      },
+      "browser.page.LCP.http://192.168.0.14:21210/Login": {
+        "min": 16624,
+        "max": 71768,
+        "count": 40,
+        "mean": 40262.3,
+        "p50": 40550.5,
+        "median": 40550.5,
+        "p75": 59297.1,
+        "p90": 61717.2,
+        "p95": 61717.2,
+        "p99": 61717.2,
+        "p999": 61717.2
+      },
+      "browser.page.INP.http://192.168.0.14:21210/Login": {
+        "min": 8472,
+        "max": 469872,
+        "count": 34,
+        "mean": 58104,
+        "p50": 20958.1,
+        "median": 20958.1,
+        "p75": 20958.1,
+        "p90": 27181.5,
+        "p95": 465275.5,
+        "p99": 465275.5,
+        "p999": 465275.5
+      },
+      "browser.page.CLS.http://192.168.0.14:21210/Login": {
+        "min": 0,
+        "max": 0,
+        "count": 46,
+        "mean": 0,
+        "p50": 0,
+        "median": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0,
+        "p999": 0
+      },
+      "vusers.session_length": {
+        "min": 47122.9,
+        "max": 546466.8,
+        "count": 118,
+        "mean": 458957.2,
+        "p50": 504028.3,
+        "median": 504028.3,
+        "p75": 514210.7,
+        "p90": 535196.7,
+        "p95": 535196.7,
+        "p99": 546008.8,
+        "p999": 546008.8
+      }
+    }
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.0": 4,
+        "vusers.created": 4
+      },
+      "rates": {},
+      "firstCounterAt": 1776409266043,
+      "lastCounterAt": 1776409269042,
+      "firstMetricAt": 1776409266043,
+      "lastMetricAt": 1776409269042,
+      "period": "1776409260000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 10,
+        "vusers.created": 10
+      },
+      "rates": {},
+      "firstCounterAt": 1776409270042,
+      "lastCounterAt": 1776409279042,
+      "firstMetricAt": 1776409270042,
+      "lastMetricAt": 1776409279042,
+      "period": "1776409270000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 10,
+        "vusers.created": 10
+      },
+      "rates": {},
+      "firstCounterAt": 1776409280042,
+      "lastCounterAt": 1776409289042,
+      "firstMetricAt": 1776409280042,
+      "lastMetricAt": 1776409289042,
+      "period": "1776409280000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.0": 20,
+        "vusers.created": 20,
+        "browser.page.codes.200": 957,
+        "browser.http_requests": 956
+      },
+      "rates": {},
+      "firstCounterAt": 1776409290042,
+      "lastCounterAt": 1776409299996,
+      "firstMetricAt": 1776409290042,
+      "lastMetricAt": 1776409299996,
+      "period": "1776409290000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 1294,
+        "browser.http_requests": 1286,
+        "vusers.created_by_name.0": 30,
+        "vusers.created": 30,
+        "percobaan_login": 5
+      },
+      "rates": {},
+      "firstCounterAt": 1776409300002,
+      "firstHistogramAt": 1776409304953,
+      "lastCounterAt": 1776409309877,
+      "lastHistogramAt": 1776409309673,
+      "firstMetricAt": 1776409300002,
+      "lastMetricAt": 1776409309877,
+      "period": "1776409300000",
+      "summaries": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 15736,
+          "max": 37540,
+          "count": 13,
+          "mean": 22217.5,
+          "p50": 21813.5,
+          "median": 21813.5,
+          "p75": 23162.4,
+          "p90": 25091.6,
+          "p95": 30647.1,
+          "p99": 30647.1,
+          "p999": 30647.1
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 750.7,
+          "max": 23648.2,
+          "count": 13,
+          "mean": 7209.4,
+          "p50": 5711.5,
+          "median": 5711.5,
+          "p75": 8692.8,
+          "p90": 10832,
+          "p95": 15839.7,
+          "p99": 15839.7,
+          "p999": 15839.7
+        }
+      },
+      "histograms": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 15736,
+          "max": 37540,
+          "count": 13,
+          "mean": 22217.5,
+          "p50": 21813.5,
+          "median": 21813.5,
+          "p75": 23162.4,
+          "p90": 25091.6,
+          "p95": 30647.1,
+          "p99": 30647.1,
+          "p999": 30647.1
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 750.7,
+          "max": 23648.2,
+          "count": 13,
+          "mean": 7209.4,
+          "p50": 5711.5,
+          "median": 5711.5,
+          "p75": 8692.8,
+          "p90": 10832,
+          "p95": 15839.7,
+          "p99": 15839.7,
+          "p999": 15839.7
+        }
+      }
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 907,
+        "browser.http_requests": 903,
+        "percobaan_login": 20,
+        "vusers.created_by_name.0": 30,
+        "vusers.created": 30
+      },
+      "rates": {},
+      "firstCounterAt": 1776409310111,
+      "firstHistogramAt": 1776409311561,
+      "lastCounterAt": 1776409319990,
+      "lastHistogramAt": 1776409315848,
+      "firstMetricAt": 1776409310111,
+      "lastMetricAt": 1776409319990,
+      "period": "1776409310000",
+      "summaries": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 19316,
+          "max": 45452,
+          "count": 13,
+          "mean": 36192.3,
+          "p50": 38960.5,
+          "median": 38960.5,
+          "p75": 42205.5,
+          "p90": 43928,
+          "p95": 45720.8,
+          "p99": 45720.8,
+          "p999": 45720.8
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 104.4,
+          "max": 26419.1,
+          "count": 12,
+          "mean": 17105.4,
+          "p50": 19737.6,
+          "median": 19737.6,
+          "p75": 22703.7,
+          "p90": 24594.7,
+          "p95": 25598.5,
+          "p99": 25598.5,
+          "p999": 25598.5
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 16624,
+          "max": 38132,
+          "count": 5,
+          "mean": 22763.2,
+          "p50": 18588.1,
+          "median": 18588.1,
+          "p75": 23162.4,
+          "p90": 23162.4,
+          "p95": 23162.4,
+          "p99": 23162.4,
+          "p999": 23162.4
+        }
+      },
+      "histograms": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 19316,
+          "max": 45452,
+          "count": 13,
+          "mean": 36192.3,
+          "p50": 38960.5,
+          "median": 38960.5,
+          "p75": 42205.5,
+          "p90": 43928,
+          "p95": 45720.8,
+          "p99": 45720.8,
+          "p999": 45720.8
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 104.4,
+          "max": 26419.1,
+          "count": 12,
+          "mean": 17105.4,
+          "p50": 19737.6,
+          "median": 19737.6,
+          "p75": 22703.7,
+          "p90": 24594.7,
+          "p95": 25598.5,
+          "p99": 25598.5,
+          "p999": 25598.5
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 16624,
+          "max": 38132,
+          "count": 5,
+          "mean": 22763.2,
+          "p50": 18588.1,
+          "median": 18588.1,
+          "p75": 23162.4,
+          "p90": 23162.4,
+          "p95": 23162.4,
+          "p99": 23162.4,
+          "p999": 23162.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "browser.http_requests": 912,
+        "browser.page.codes.200": 917,
+        "vusers.created_by_name.0": 16,
+        "vusers.created": 16,
+        "percobaan_login": 6
+      },
+      "rates": {},
+      "firstCounterAt": 1776409320000,
+      "firstHistogramAt": 1776409320617,
+      "lastCounterAt": 1776409329932,
+      "lastHistogramAt": 1776409328293,
+      "firstMetricAt": 1776409320000,
+      "lastMetricAt": 1776409329932,
+      "period": "1776409320000",
+      "summaries": {
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 182.8,
+          "max": 24538.4,
+          "count": 6,
+          "mean": 10086.8,
+          "p50": 383.8,
+          "median": 383.8,
+          "p75": 16486.1,
+          "p90": 18588.1,
+          "p95": 18588.1,
+          "p99": 18588.1,
+          "p999": 18588.1
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 29356,
+          "max": 47792,
+          "count": 5,
+          "mean": 36034.4,
+          "p50": 29445.4,
+          "median": 29445.4,
+          "p75": 43928,
+          "p90": 43928,
+          "p95": 43928,
+          "p99": 43928,
+          "p999": 43928
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 17940,
+          "max": 33200,
+          "count": 8,
+          "mean": 24097.5,
+          "p50": 23630.3,
+          "median": 23630.3,
+          "p75": 25091.6,
+          "p90": 28290.8,
+          "p95": 28290.8,
+          "p99": 28290.8,
+          "p999": 28290.8
+        }
+      },
+      "histograms": {
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 182.8,
+          "max": 24538.4,
+          "count": 6,
+          "mean": 10086.8,
+          "p50": 383.8,
+          "median": 383.8,
+          "p75": 16486.1,
+          "p90": 18588.1,
+          "p95": 18588.1,
+          "p99": 18588.1,
+          "p999": 18588.1
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 29356,
+          "max": 47792,
+          "count": 5,
+          "mean": 36034.4,
+          "p50": 29445.4,
+          "median": 29445.4,
+          "p75": 43928,
+          "p90": 43928,
+          "p95": 43928,
+          "p99": 43928,
+          "p999": 43928
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 17940,
+          "max": 33200,
+          "count": 8,
+          "mean": 24097.5,
+          "p50": 23630.3,
+          "median": 23630.3,
+          "p75": 25091.6,
+          "p90": 28290.8,
+          "p95": 28290.8,
+          "p99": 28290.8,
+          "p999": 28290.8
+        }
+      }
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 534,
+        "browser.http_requests": 530,
+        "login_gagal_timeout": 5,
+        "vusers.failed": 0,
+        "vusers.completed": 5
+      },
+      "rates": {},
+      "firstCounterAt": 1776409330061,
+      "firstHistogramAt": 1776409336147,
+      "lastCounterAt": 1776409339945,
+      "lastHistogramAt": 1776409339894,
+      "firstMetricAt": 1776409330061,
+      "lastMetricAt": 1776409339945,
+      "period": "1776409330000",
+      "summaries": {
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 8472,
+          "max": 8560,
+          "count": 5,
+          "mean": 8496,
+          "p50": 8520.7,
+          "median": 8520.7,
+          "p75": 8520.7,
+          "p90": 8520.7,
+          "p95": 8520.7,
+          "p99": 8520.7,
+          "p999": 8520.7
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 5,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 47122.9,
+          "max": 69120.5,
+          "count": 5,
+          "mean": 53521.2,
+          "p50": 49528.8,
+          "median": 49528.8,
+          "p75": 53654.1,
+          "p90": 53654.1,
+          "p95": 53654.1,
+          "p99": 53654.1,
+          "p999": 53654.1
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 41008,
+          "max": 41660,
+          "count": 3,
+          "mean": 41330.7,
+          "p50": 41369.7,
+          "median": 41369.7,
+          "p75": 41369.7,
+          "p90": 41369.7,
+          "p95": 41369.7,
+          "p99": 41369.7,
+          "p999": 41369.7
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 50.5,
+          "max": 180.4,
+          "count": 3,
+          "mean": 108,
+          "p50": 92.8,
+          "median": 92.8,
+          "p75": 92.8,
+          "p90": 92.8,
+          "p95": 92.8,
+          "p99": 92.8,
+          "p999": 92.8
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 20936,
+          "max": 47044,
+          "count": 12,
+          "mean": 37463.3,
+          "p50": 39747.5,
+          "median": 39747.5,
+          "p75": 43058.1,
+          "p90": 44815.4,
+          "p95": 45720.8,
+          "p99": 45720.8,
+          "p999": 45720.8
+        }
+      },
+      "histograms": {
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 8472,
+          "max": 8560,
+          "count": 5,
+          "mean": 8496,
+          "p50": 8520.7,
+          "median": 8520.7,
+          "p75": 8520.7,
+          "p90": 8520.7,
+          "p95": 8520.7,
+          "p99": 8520.7,
+          "p999": 8520.7
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 5,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 47122.9,
+          "max": 69120.5,
+          "count": 5,
+          "mean": 53521.2,
+          "p50": 49528.8,
+          "median": 49528.8,
+          "p75": 53654.1,
+          "p90": 53654.1,
+          "p95": 53654.1,
+          "p99": 53654.1,
+          "p999": 53654.1
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 41008,
+          "max": 41660,
+          "count": 3,
+          "mean": 41330.7,
+          "p50": 41369.7,
+          "median": 41369.7,
+          "p75": 41369.7,
+          "p90": 41369.7,
+          "p95": 41369.7,
+          "p99": 41369.7,
+          "p999": 41369.7
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 50.5,
+          "max": 180.4,
+          "count": 3,
+          "mean": 108,
+          "p50": 92.8,
+          "median": 92.8,
+          "p75": 92.8,
+          "p90": 92.8,
+          "p95": 92.8,
+          "p99": 92.8,
+          "p999": 92.8
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 20936,
+          "max": 47044,
+          "count": 12,
+          "mean": 37463.3,
+          "p50": 39747.5,
+          "median": 39747.5,
+          "p75": 43058.1,
+          "p90": 44815.4,
+          "p95": 45720.8,
+          "p99": 45720.8,
+          "p999": 45720.8
+        }
+      }
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 363,
+        "browser.http_requests": 359,
+        "percobaan_login": 3,
+        "login_gagal_timeout": 8,
+        "vusers.failed": 0,
+        "vusers.completed": 8
+      },
+      "rates": {},
+      "firstCounterAt": 1776409340010,
+      "firstHistogramAt": 1776409348481,
+      "lastCounterAt": 1776409349991,
+      "lastHistogramAt": 1776409349983,
+      "firstMetricAt": 1776409340010,
+      "lastMetricAt": 1776409349991,
+      "period": "1776409340000",
+      "summaries": {
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 14280,
+          "max": 14536,
+          "count": 8,
+          "mean": 14408,
+          "p50": 14332.3,
+          "median": 14332.3,
+          "p75": 14332.3,
+          "p90": 14621.8,
+          "p95": 14621.8,
+          "p99": 14621.8,
+          "p999": 14621.8
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 8,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 57813.7,
+          "max": 73567.6,
+          "count": 8,
+          "mean": 64364.6,
+          "p50": 64236,
+          "median": 64236,
+          "p75": 65533.7,
+          "p90": 68208.3,
+          "p95": 68208.3,
+          "p99": 68208.3,
+          "p999": 68208.3
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 50344,
+          "max": 50344,
+          "count": 1,
+          "mean": 50344,
+          "p50": 50529.4,
+          "median": 50529.4,
+          "p75": 50529.4,
+          "p90": 50529.4,
+          "p95": 50529.4,
+          "p99": 50529.4,
+          "p999": 50529.4
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 50584,
+          "max": 50908,
+          "count": 4,
+          "mean": 50733,
+          "p50": 50529.4,
+          "median": 50529.4,
+          "p75": 50529.4,
+          "p90": 50529.4,
+          "p95": 50529.4,
+          "p99": 50529.4,
+          "p999": 50529.4
+        }
+      },
+      "histograms": {
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 14280,
+          "max": 14536,
+          "count": 8,
+          "mean": 14408,
+          "p50": 14332.3,
+          "median": 14332.3,
+          "p75": 14332.3,
+          "p90": 14621.8,
+          "p95": 14621.8,
+          "p99": 14621.8,
+          "p999": 14621.8
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 8,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 57813.7,
+          "max": 73567.6,
+          "count": 8,
+          "mean": 64364.6,
+          "p50": 64236,
+          "median": 64236,
+          "p75": 65533.7,
+          "p90": 68208.3,
+          "p95": 68208.3,
+          "p99": 68208.3,
+          "p999": 68208.3
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 50344,
+          "max": 50344,
+          "count": 1,
+          "mean": 50344,
+          "p50": 50529.4,
+          "median": 50529.4,
+          "p75": 50529.4,
+          "p90": 50529.4,
+          "p95": 50529.4,
+          "p99": 50529.4,
+          "p999": 50529.4
+        },
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 50584,
+          "max": 50908,
+          "count": 4,
+          "mean": 50733,
+          "p50": 50529.4,
+          "median": 50529.4,
+          "p75": 50529.4,
+          "p90": 50529.4,
+          "p95": 50529.4,
+          "p99": 50529.4,
+          "p999": 50529.4
+        }
+      }
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 40,
+        "browser.http_requests": 38,
+        "login_gagal_timeout": 9
+      },
+      "rates": {},
+      "firstCounterAt": 1776409374870,
+      "lastCounterAt": 1776409374875,
+      "firstMetricAt": 1776409374870,
+      "lastMetricAt": 1776409374875,
+      "period": "1776409370000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "browser.http_requests": 6,
+        "browser.page.codes.200": 5
+      },
+      "rates": {},
+      "firstCounterAt": 1776409809951,
+      "lastCounterAt": 1776409809978,
+      "firstMetricAt": 1776409809951,
+      "lastMetricAt": 1776409809978,
+      "period": "1776409800000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "browser.page.codes.200": 939,
+        "browser.http_requests": 947,
+        "login_gagal_timeout": 79,
+        "vusers.failed": 0,
+        "vusers.completed": 105
+      },
+      "rates": {},
+      "firstCounterAt": 1776409810008,
+      "firstHistogramAt": 1776409810777,
+      "lastCounterAt": 1776409813910,
+      "lastHistogramAt": 1776409813910,
+      "firstMetricAt": 1776409810008,
+      "lastMetricAt": 1776409813910,
+      "period": "1776409810000",
+      "summaries": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 57144,
+          "max": 505748,
+          "count": 4,
+          "mean": 281560,
+          "p50": 58122.9,
+          "median": 58122.9,
+          "p75": 504028.3,
+          "p90": 504028.3,
+          "p95": 504028.3,
+          "p99": 504028.3,
+          "p999": 504028.3
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 37.9,
+          "max": 1624.3,
+          "count": 12,
+          "mean": 306.6,
+          "p50": 190.6,
+          "median": 190.6,
+          "p75": 290.1,
+          "p90": 290.1,
+          "p95": 295.9,
+          "p99": 295.9,
+          "p999": 295.9
+        },
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 20712,
+          "max": 469872,
+          "count": 21,
+          "mean": 86561.5,
+          "p50": 20958.1,
+          "median": 20958.1,
+          "p75": 27181.5,
+          "p90": 465275.5,
+          "p95": 465275.5,
+          "p99": 465275.5,
+          "p999": 465275.5
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 33,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 488523.9,
+          "max": 546466.8,
+          "count": 105,
+          "mean": 508327.9,
+          "p50": 504028.3,
+          "median": 504028.3,
+          "p75": 514210.7,
+          "p90": 535196.7,
+          "p95": 535196.7,
+          "p99": 546008.8,
+          "p999": 546008.8
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 41628,
+          "max": 71768,
+          "count": 14,
+          "mean": 57428,
+          "p50": 59297.1,
+          "median": 59297.1,
+          "p75": 61717.2,
+          "p90": 61717.2,
+          "p95": 61717.2,
+          "p99": 61717.2,
+          "p999": 61717.2
+        }
+      },
+      "histograms": {
+        "browser.page.FCP.http://192.168.0.14:21210/Login": {
+          "min": 57144,
+          "max": 505748,
+          "count": 4,
+          "mean": 281560,
+          "p50": 58122.9,
+          "median": 58122.9,
+          "p75": 504028.3,
+          "p90": 504028.3,
+          "p95": 504028.3,
+          "p99": 504028.3,
+          "p999": 504028.3
+        },
+        "browser.page.TTFB.http://192.168.0.14:21210/Login": {
+          "min": 37.9,
+          "max": 1624.3,
+          "count": 12,
+          "mean": 306.6,
+          "p50": 190.6,
+          "median": 190.6,
+          "p75": 290.1,
+          "p90": 290.1,
+          "p95": 295.9,
+          "p99": 295.9,
+          "p999": 295.9
+        },
+        "browser.page.INP.http://192.168.0.14:21210/Login": {
+          "min": 20712,
+          "max": 469872,
+          "count": 21,
+          "mean": 86561.5,
+          "p50": 20958.1,
+          "median": 20958.1,
+          "p75": 27181.5,
+          "p90": 465275.5,
+          "p95": 465275.5,
+          "p99": 465275.5,
+          "p999": 465275.5
+        },
+        "browser.page.CLS.http://192.168.0.14:21210/Login": {
+          "min": 0,
+          "max": 0,
+          "count": 33,
+          "mean": 0,
+          "p50": 0,
+          "median": 0,
+          "p75": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0,
+          "p999": 0
+        },
+        "vusers.session_length": {
+          "min": 488523.9,
+          "max": 546466.8,
+          "count": 105,
+          "mean": 508327.9,
+          "p50": 504028.3,
+          "median": 504028.3,
+          "p75": 514210.7,
+          "p90": 535196.7,
+          "p95": 535196.7,
+          "p99": 546008.8,
+          "p999": 546008.8
+        },
+        "browser.page.LCP.http://192.168.0.14:21210/Login": {
+          "min": 41628,
+          "max": 71768,
+          "count": 14,
+          "mean": 57428,
+          "p50": 59297.1,
+          "median": 59297.1,
+          "p75": 61717.2,
+          "p90": 61717.2,
+          "p95": 61717.2,
+          "p99": 61717.2,
+          "p999": 61717.2
+        }
+      }
+    }
+  ]
+}

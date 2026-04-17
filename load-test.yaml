@@ -1,0 +1,32 @@
+config:
+  target: "https://alibnymn.github.io"
+  processor: "./test-porto.js"
+  
+  engines:
+    playwright:
+      launchOptions:
+        headless: true
+      contextOptions:
+        viewport: { width: 1280, height: 720 }
+        ignoreHTTPSErrors: true
+
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 2
+      name: "Warm up"
+    - duration: 40
+      arrivalRate: 2
+      name: "Sustained Load"
+
+  plugins:
+    ensure: {} 
+  ensure:
+    thresholds:
+      - "browser.page.FCP.https://alibnymn.github.io/ < 3000"
+    conditions:
+      - expression: "(vusers.failed / vusers.created) * 100 < 5"
+
+scenarios:
+  - engine: playwright
+    testFunction: "scenario"

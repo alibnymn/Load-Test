@@ -1,0 +1,33 @@
+config:
+  target: "http://192.168.0.14:21210"
+  processor: "./test-login.js"
+  
+  payload:
+    path: "user.csv"
+    fields:
+      - "username"
+      - "password"
+    order: "sequence"
+
+  engines:
+    playwright:
+      launchOptions:
+        headless: true
+
+  ensure:
+    thresholds:
+      - "browser.page.FCP.http://192.168.0.14:21210/Login < 5000"
+    conditions:
+      - expression: "(vusers.failed / vusers.created) * 100 < 5"
+
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      name: "Warm up (Sabar Mode)"
+    - duration: 30
+      arrivalRate: 3
+      name: "High Traffic (Stress Test)"
+
+scenarios:
+  - engine: playwright
+    testFunction: "scenario"
