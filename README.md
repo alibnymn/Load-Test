@@ -1,5 +1,8 @@
 🚀 Artillery Load Test - HTML Dashboard Converter
 
+<img width="1600" height="680" alt="SS_463559815" src="https://github.com/user-attachments/assets/cfa3e3f6-9e7c-4bfc-89ce-2b195e350b1b" />
+
+
 Repo ini berisi script converter Node.js untuk mengubah file laporan JSON standar dari **Artillery.io** menjadi Dashboard HTML yang interaktif, modern, dan mudah dibaca. 
 
 Dashboard ini dirancang khusus untuk kebutuhan QA Reporting dengan tampilan *Artillery Cloud Style*.
