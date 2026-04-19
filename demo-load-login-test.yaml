@@ -2,31 +2,38 @@ config:
   target: "https://www.saucedemo.com/"
   processor: "./test-login-demo.js"
   
-  payload:
-    path: "user-login.csv"
-    fields:
-      - "username"
-      - "password"
-    order: "sequence"
+  # PLUGIN harus di bawah config (sejajar target)
+  plugins:
+    apdex: {}
+    ensure: {}
+
+  # APDEX SETTINGS
+  apdex:
+    threshold: 150
+    metrics:
+      - "http.response_time"
+
+  # ENSURE SETTINGS
+  ensure:
+    thresholds:
+      - "http.response_time.p99 < 300"
+      - "http.response_time.p95 < 150"
+    conditions:
+      - expression: "(vusers.failed / vusers.created) * 100 < 5"
 
   engines:
     playwright:
       launchOptions:
         headless: true
 
-  ensure:
-    thresholds:
-      - "browser.page.FCP.https://www.saucedemo.com/ < 5000"
-    conditions:
-      - expression: "(vusers.failed / vusers.created) * 100 < 5"
-
   phases:
     - duration: 30
       arrivalRate: 2
-      name: "Warm up (Sabar Mode)"
+      name: "Normal Mode"
     - duration: 60
-      arrivalRate: 3
-      name: "High Traffic (Stress Test)"
+      arrivalRate: 2
+      rampTo: 10
+      name: "Beban Test"
 
 scenarios:
   - engine: playwright
