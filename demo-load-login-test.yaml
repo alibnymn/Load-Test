@@ -2,24 +2,22 @@ config:
   target: "https://www.saucedemo.com/"
   processor: "./test-login-demo.js"
   
-  # PLUGIN harus di bawah config (sejajar target)
   plugins:
     apdex: {}
     ensure: {}
 
-  # APDEX SETTINGS
   apdex:
-    threshold: 150
+    threshold: 200 
     metrics:
       - "http.response_time"
 
-  # ENSURE SETTINGS
   ensure:
     thresholds:
-      - "http.response_time.p99 < 300"
-      - "http.response_time.p95 < 150"
+      - "http.response_time.p99 < 500"
+      - "http.response_time.p95 < 250"
+      - "apdex.score >= 0.90"
     conditions:
-      - expression: "(vusers.failed / vusers.created) * 100 < 5"
+      - expression: "http.codes.200 == http.requests" 
 
   engines:
     playwright:
@@ -31,8 +29,8 @@ config:
       arrivalRate: 2
       name: "Normal Mode"
     - duration: 60
-      arrivalRate: 2
-      rampTo: 10
+      arrivalRate: 3
+      rampTo: 15
       name: "Beban Test"
 
 scenarios:

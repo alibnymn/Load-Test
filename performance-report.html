@@ -3,138 +3,174 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Performance QA Detailed Report</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <title>QA Load Test Reporting Local</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
         <style>
-            :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --blue: #58a6ff; --green: #3fb950; --yellow: #d29922; --red: #f85149; }
-            body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px 20px; line-height: 1.6; }
-            .container { max-width: 1000px; margin: auto; }
-            
-            /* Header */
-            .header { text-align: center; margin-bottom: 30px; }
-            .header h1 { font-size: 22px; color: #f0f6fc; margin-bottom: 10px; text-transform: uppercase; }
-            .url-badge { display: inline-block; background: #0f1d31; border: 1px solid var(--blue); color: var(--blue); padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 13px; }
-
-            /* Load Summary Section (Artillery Style) */
-            .load-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 25px; }
-            .load-box { background: var(--card); padding: 20px; text-align: center; }
-            .load-box .l-val { font-size: 28px; font-weight: 700; color: #f0f6fc; display: block; }
-            .load-box .l-lbl { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.5px; }
-
-            /* Section Styling */
-            .section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
-            .section-title { font-size: 14px; font-weight: 700; margin-bottom: 20px; color: var(--blue); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
-            .section-title::before { content: ""; width: 3px; height: 14px; background: var(--blue); border-radius: 10px; }
-
-            /* Metrics Grid */
-            .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-            .m-card { background: #0d1117; border: 1px solid var(--border); padding: 15px; border-radius: 8px; }
-            .m-label { font-size: 10px; color: #8b949e; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
-            .m-value { font-size: 20px; font-weight: 700; color: #f0f6fc; }
-            .m-unit { font-size: 12px; color: #8b949e; margin-left: 3px; }
-
-            /* Glossary Table */
-            .glossary-table { width: 100%; border-collapse: collapse; font-size: 13px; color: #8b949e; }
-            .glossary-table td { padding: 10px; border-bottom: 1px solid #21262d; }
-            .glossary-table b { color: var(--blue); }
-            
-            canvas { width: 100% !important; max-height: 250px; }
+            body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; }
+            .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; height: 100%; }
+            .label-title { font-size: 11px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.1em; }
+            .mono { font-family: 'JetBrains Mono', monospace; }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>🚀 Performance Load Test Report</h1>
-                <div class="url-badge">http://192.168.0.14:21210/Login</div>
+    <body class="p-8 space-y-6">
+
+        <header class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white">QA</div>
+                <h1 class="text-white font-extrabold text-xl tracking-tight uppercase">QA Load Test Reporting <span class="text-blue-500">Local</span></h1>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-4 gap-6">
+            <div class="card p-6">
+                <p class="label-title mb-4">Checks</p>
+                <div class="space-y-3">
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] text-black font-bold">✓</div>
+                            <span class="text-emerald-400 text-[11px] font-bold mono">page.codes.200</span>
+                        </div>
+                        <span class="text-white font-bold text-xs">8176</span>
+                    </div>
+                    <div class="px-1 flex justify-between text-[10px] font-bold uppercase">
+                        <span class="text-zinc-500">Success Rate</span>
+                        <span class="text-emerald-500">131.0%</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="load-summary">
-                <div class="load-box">
-                    <span class="l-val">120</span>
-                    <span class="l-lbl">VUsers Created</span>
+            <div class="card p-6 flex flex-col items-center justify-center">
+                <p class="label-title self-start mb-4">Apdex</p>
+                <div class="relative flex items-center justify-center mb-2">
+                    <svg class="w-24 h-24 transform -rotate-90">
+                        <circle cx="48" cy="48" r="40" stroke="#21262d" stroke-width="6" fill="transparent" />
+                        <circle cx="48" cy="48" r="40" stroke="currentColor" class="stroke-orange-400" stroke-width="6" fill="transparent" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" />
+                    </svg>
+                    <span class="absolute text-2xl font-black text-white">0</span>
                 </div>
-                <div class="load-box">
-                    <span class="l-val" style="color: var(--green)">98.33%</span>
-                    <span class="l-lbl">Success Rate</span>
-                </div>
-                <div class="load-box">
-                    <span class="l-val">3.3</span>
-                    <span class="l-lbl">Avg Req/s</span>
-                </div>
-                <div class="load-box">
-                    <span class="l-val">128.6</span>
-                    <span class="l-lbl">Peak Req/s</span>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-orange-400">Fair</p>
+            </div>
+
+            <div class="card p-6">
+                <p class="label-title mb-3">Errors</p>
+                <div class="space-y-1 max-h-[100px] overflow-y-auto">
+                    <p class="text-zinc-600 italic text-[10px] text-center mt-6">Clean run, no errors.</p>
                 </div>
             </div>
 
-            <div class="section">
-                <div class="section-title">Detailed Latency Metrics (FCP)</div>
-                <div class="metrics-grid">
-                    <div class="m-card"><div class="m-label">Minimum</div><div class="m-value">15736<span class="m-unit">ms</span></div></div>
-                    <div class="m-card"><div class="m-label">Average (Mean)</div><div class="m-value" style="color: var(--blue)">56968.2<span class="m-unit">ms</span></div></div>
-                    <div class="m-card"><div class="m-label">Maximum</div><div class="m-value">505748<span class="m-unit">ms</span></div></div>
+            <div class="card p-6">
+                <p class="label-title mb-4">Metadata</p>
+                <div class="text-[11px] space-y-3 text-zinc-400">
+                    <div class="flex justify-between"><span>Date</span><span class="text-white">4/21/2026</span></div>
+                    <div class="flex justify-between"><span>Duration</span><span class="text-white">29m 36s</span></div>
+                    <div class="flex justify-between"><span>Total VU</span><span class="text-white">365</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-9 card p-8">
+                <p class="label-title mb-8">Load Summary</p>
+                
+                <div class="grid grid-cols-4 gap-0 mb-12 border-b border-zinc-800 pb-8">
+                    <div class="text-center border-r border-zinc-800">
+                        <p class="text-4xl font-black text-white">365</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase tracking-tighter">vusers created</p>
+                    </div>
                     
-                    <div class="m-card"><div class="m-label">p95 (95th %)</div><div class="m-value" style="color: var(--yellow)">56972<span class="m-unit">ms</span></div></div>
-                    <div class="m-card"><div class="m-label">p99 (99th %)</div><div class="m-value" style="color: var(--red)">504028.3<span class="m-unit">ms</span></div></div>
-                    <div class="m-card"><div class="m-label">Failed Users</div><div class="m-value" style="color: var(--red)">0</div></div>
+                    <div class="px-8 border-r border-zinc-800">
+                        <div class="flex justify-between items-end mb-2">
+                            <p class="text-xl font-bold text-white">365 <span class="text-xs font-normal text-zinc-500 italic">completed</span></p>
+                            <span class="text-[10px] font-bold text-blue-400">100.0%</span>
+                        </div>
+                        <div class="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full shadow-[0_0_10px_rgba(59,130,246,0.4)]" style="width: 100.0%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <p class="text-[10px] text-zinc-500 font-mono">0 failed</p>
+                            <p class="text-[10px] text-red-400 font-mono">0.0%</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center border-r border-zinc-800">
+                        <p class="text-4xl font-black text-white">3.5</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase">avg req/s</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl font-black text-white">31.8</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase">peak req/s</p>
+                    </div>
                 </div>
+
+                <div id="mainChart" class="w-full"></div>
             </div>
 
-            <div class="section">
-                <div class="section-title">Latency Trend (p95)</div>
-                <canvas id="latencyChart"></canvas>
-            </div>
+            <div class="col-span-3 card p-6">
+                <p class="label-title mb-6">Test Config</p>
+                <div class="bg-black/40 rounded-lg p-4 border border-zinc-800 overflow-hidden h-[500px]">
+                    <pre class="text-[10px] text-blue-300 mono whitespace-pre-wrap leading-relaxed h-full overflow-y-auto">config:
+  target: "https://alibnymn.github.io"
+  processor: "./test-porto.js"
+  
+  engines:
+    playwright:
+      launchOptions:
+        headless: true
+      contextOptions:
+        viewport: { width: 1280, height: 720 }
+        ignoreHTTPSErrors: true
 
-            <div class="section">
-                <div class="section-title">Throughput Trend (RPS)</div>
-                <canvas id="rpsChart"></canvas>
-            </div>
+  phases:
+    - duration: 50
+      arrivalRate: 3
+      rampTo: 2
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 4
+      name: "Sustained Load"
 
-            <div class="section">
-                <div class="section-title">Metric Definitions</div>
-                <table class="glossary-table">
-                    <tr><td><b>VUsers Created</b></td><td>Total simulasi pengguna unik yang dibuat selama durasi test.</td></tr>
-                    <tr><td><b>Avg Req/s</b></td><td>Rata-rata jumlah request HTTP yang berhasil dikirimkan per detik.</td></tr>
-                    <tr><td><b>Peak Req/s</b></td><td>Titik tertinggi jumlah request per detik yang dicapai selama pengujian.</td></tr>
-                    <tr><td><b>p95 Latency</b></td><td>95% request memiliki waktu respon lebih cepat dari nilai ini (Standar utama performa).</td></tr>
-                    <tr><td><b>FCP (First Contentful Paint)</b></td><td>Waktu yang dibutuhkan browser untuk merender konten pertama di layar.</td></tr>
-                </table>
+  plugins:
+    ensure: {}
+    # --- TAMBAHKAN PLUGIN APDEX DI SINI ---
+    apdex:
+      threshold: 1500 # Kecepatan (ms) yang dianggap memuaskan bagi user
+    metrics-by-endpoint: {} # Opsional: Supaya error per endpoint lebih detail
+
+  ensure:
+    thresholds:
+      - "browser.page.FCP.https://alibnymn.github.io/ &lt; 3000"
+    conditions:
+      - expression: "(vusers.failed / vusers.created) * 100 &lt; 5"
+
+scenarios:
+  - engine: playwright
+    testFunction: "scenario"</pre>
+                </div>
             </div>
         </div>
 
         <script>
-            const setupChart = (id, data, color, label) => {
-                const ctx = document.getElementById(id).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ["10s","20s","30s","40s","50s","60s","70s","80s","90s","100s","110s","120s"],
-                        datasets: [{
-                            label: label,
-                            data: data,
-                            borderColor: color,
-                            backgroundColor: color.replace('1)', '0.1)'),
-                            fill: true,
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: { grid: { color: '#21262d' }, ticks: { color: '#8b949e' } },
-                            x: { grid: { display: false }, ticks: { color: '#8b949e' } }
-                        }
-                    }
-                });
-            };
-
-            setupChart('latencyChart', [0,0,0,0,30647.1,45720.8,43928,41369.7,50529.4,0,0,504028.3], 'rgba(210, 153, 34, 1)', 'Latency p95');
-            setupChart('rpsChart', ["0.0","0.0","0.0","95.6","128.6","90.3","91.2","53.0","35.9","3.8","0.6","94.7"], 'rgba(88, 166, 255, 1)', 'Requests/s');
+            new ApexCharts(document.querySelector("#mainChart"), {
+                series: [
+                    { name: 'VUsers', type: 'area', data: [28,29,25,20,20,37,40,40,40,40,40,6,0,0,0,0,0,0,0,0,0,0,0] },
+                    { name: 'P95 Latency', type: 'line', data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] }
+                ],
+                chart: { height: 380, type: 'line', toolbar: { show: false }, background: 'transparent' },
+                colors: ['#e3b341', '#3b82f6'],
+                stroke: { width: [2, 3], curve: 'smooth' },
+                xaxis: { 
+                    categories: ["0s","10s","20s","30s","40s","50s","60s","70s","80s","90s","100s","110s","120s","130s","140s","150s","160s","170s","180s","190s","200s","210s","220s"], 
+                    labels: { style: { colors: '#6b7280', fontSize: '10px' } }
+                },
+                yaxis: [
+                    { labels: { style: { colors: '#e3b341' } }, title: { text: 'VUsers' } },
+                    { opposite: true, labels: { style: { colors: '#3b82f6' } }, title: { text: 'Latency (ms)' } }
+                ],
+                grid: { borderColor: '#1f2937' },
+                theme: { mode: 'dark' }
+            }).render();
         </script>
     </body>
     </html>

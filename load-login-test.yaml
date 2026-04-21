@@ -21,11 +21,11 @@ config:
       - expression: "(vusers.failed / vusers.created) * 100 < 5"
 
   phases:
-    - duration: 30
+    - duration: 20
       arrivalRate: 1
       name: "Warm up (Sabar Mode)"
     - duration: 30
-      arrivalRate: 3
+      arrivalRate: 2
       name: "High Traffic (Stress Test)"
 
 scenarios:

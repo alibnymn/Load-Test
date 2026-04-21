@@ -1,245 +1,206 @@
 const fs = require('fs');
 
+const jsonFileName = 'report.json';
+const yamlFileName = 'load-test.yaml'; 
+
 try {
-    const rawData = fs.readFileSync('report.json');
-    const data = JSON.parse(rawData);
-    const aggregate = data.aggregate;
+    if (!fs.existsSync(jsonFileName)) throw new Error(`File ${jsonFileName} tidak ditemukan!`);
+    
+    const data = JSON.parse(fs.readFileSync(jsonFileName, 'utf8'));
+    const aggregate = data.aggregate || {};
     const counters = aggregate.counters || {};
-    const summaries = aggregate.summaries || {};
+    const config = data.config || {};
+    const intermediate = data.intermediate || [];
 
-    // --- FIX: AMBIL TIMESTAMP & FORMAT ---
-    // Pastikan mengambil dari aggregate.timestamp atau data.timestamp
-    const rawTimestamp = aggregate.timestamp || data.timestamp || new Date().toISOString();
-    const testTimestamp = new Date(rawTimestamp).toLocaleString('id-ID', { 
-        day: '2-digit', 
-        month: 'short', 
-        year: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-
-    // --- 1. AMBIL DATA REAL UNTUK CHECKS ---
-    const fcpKey = Object.keys(summaries).find(k => k.includes('browser.page.FCP')) || "";
-    const fcpData = summaries[fcpKey] || {};
-    
-    const realP99 = fcpData.p99 || 0;
-    const realP95 = fcpData.p95 || 0;
-
-    // Logika Status Checks (Real Comparison)
-    const checkP99 = realP99 < 300 ? { s: '✔', c: 'var(--cyan)' } : { s: '✖', c: '#f85149' };
-    const checkP95 = realP95 < 150 ? { s: '✔', c: 'var(--cyan)' } : { s: '✖', c: '#f85149' };
-
-    // --- 2. HITUNG APDEX REAL ---
-    // Rumus sederhana: Jika p95 di bawah 200ms = Excellent, di bawah 500ms = Good, dst.
-    let apdexScore = 0;
-    let apdexRating = "";
-    let apdexColor = "";
-
-    if (realP95 <= 200) {
-        apdexScore = 99;
-        apdexRating = "Excellent";
-        apdexColor = "var(--cyan)";
-    } else if (realP95 <= 500) {
-        apdexScore = 85;
-        apdexRating = "Good";
-        apdexColor = "var(--orange)";
-    } else {
-        apdexScore = 60;
-        apdexRating = "Fair";
-        apdexColor = "#f85149";
-    }
-
-    // --- DATA PARSING ---
-    const targetUrl = fcpKey.split('FCP.')[1] || "https://www.saucedemo.com/";
-    
-    const duration = (aggregate.period / 1000000000) || 1;
-    const totalRequests = counters["browser.http_requests"] || 0;
+    // --- 1. DATA CALCULATION (FIXED LOGIC) ---
     const vCreated = counters["vusers.created"] || 0;
     const vCompleted = counters["vusers.completed"] || 0;
     const vFailed = counters["vusers.failed"] || 0;
+    
+    // Hitung persentase jujur terhadap populasi vusers
+    const completedPercent = vCreated > 0 ? ((vCompleted / vCreated) * 100).toFixed(1) : 0;
+    const failedPercent = vCreated > 0 ? ((vFailed / vCreated) * 100).toFixed(1) : 0;
 
-    // --- TIME SERIES DATA (MAIN GRAPH) ---
-    const labels = data.intermediate.map((_, i) => (i * 10) + "s");
-    const vUsersSeries = data.intermediate.map(s => s.counters["vusers.created"] || 0);
-    const rpsSeries = data.intermediate.map(s => (s.counters["browser.http_requests"] || 0) / 10);
-    const p95Series = data.intermediate.map(s => {
-        const k = Object.keys(s.summaries).find(key => key.includes('browser.page.FCP')) || "";
-        return s.summaries[k] ? s.summaries[k].p95 : 0;
-    });
+    const successReq = counters["browser.page.codes.200"] || counters["http.codes.200"] || 0;
+    const totalReq = counters["browser.http_requests"] || counters["http.requests"] || 0;
+    const reqSuccessPercent = totalReq > 0 ? ((successReq / totalReq) * 100).toFixed(1) : 0;
+    
+    const durationSec = Math.floor((aggregate.period / 1000000000) || 1);
+    const avgRps = (totalReq / durationSec).toFixed(1);
+    const peakRps = (Math.max(...intermediate.map(s => (s.counters?.["browser.http_requests"] || 0) / 10)) || 0).toFixed(1);
+
+    // --- 2. APDEX LOGIC (MATCH TERMINAL) ---
+    const apdexScoreRaw = aggregate.apdex?.score || 0;
+    const apdexScore = Math.round(apdexScoreRaw * 100);
+
+    let apdexStatus = "Fair";
+    let apdexColor = "text-orange-400";
+    let apdexStroke = "stroke-orange-400";
+    if (apdexScore >= 94) { 
+        apdexStatus = "Excellent"; apdexColor = "text-emerald-500"; apdexStroke = "stroke-emerald-500";
+    } else if (apdexScore >= 75) { 
+        apdexStatus = "Good"; apdexColor = "text-blue-400"; apdexStroke = "stroke-blue-400";
+    }
+
+    const errors = Object.keys(counters)
+        .filter(k => (k.includes('error') || k.includes('timeout') || k.includes('401') || k.includes('ETIMEDOUT')) && counters[k] > 0 && k !== 'vusers.failed')
+        .map(k => ({ name: k.replace('errors.', '').replace('plugins.metrics-by-endpoint.', ''), count: counters[k] }));
+
+    const labels = intermediate.map((_, i) => (i * 10) + "s");
+    const vUsersSeries = intermediate.map(s => s.counters?.["vusers.created"] || 0);
+    const latencySeries = intermediate.map(s => s.summaries?.["browser.page.FCP.https://www.saucedemo.com/"]?.p95 || s.summaries?.["http.response_time"]?.p95 || 0);
+
+    let yamlSource = "File YAML tidak ditemukan.";
+    if (fs.existsSync(yamlFileName)) yamlSource = fs.readFileSync(yamlFileName, 'utf8');
 
     const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Artillery Ultimate Insights | QA Report</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <title>QA Load Test Reporting Local</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
         <style>
-            :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --green: #3fb950; --blue: #58a6ff; --cyan: #39d353; --orange: #d29922; --purple: #ab7df8; --gray: #8b949e; --red: #f85149; }
-            body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 30px; line-height: 1.5; }
-            .container { max-width: 1200px; margin: auto; }
-            
-            .qa-header { background: linear-gradient(90deg, #161b22 0%, #0d1117 100%); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-            .qa-info h1 { font-size: 20px; margin: 0; color: #f0f6fc; display: flex; align-items: center; gap: 10px; }
-            .badge-item { text-align: right; border-left: 1px solid var(--border); padding-left: 15px; }
-            .badge-label { font-size: 10px; text-transform: uppercase; color: var(--gray); font-weight: 700; }
-            .badge-val { font-size: 14px; color: var(--blue); font-weight: 600; display: block; }
-
-            .sec-title { font-size: 13px; font-weight: 600; margin: 30px 0 15px; color: #f0f6fc; display: flex; align-items: center; gap: 8px; }
-            .top-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 25px; }
-            .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; }
-            
-            .apdex-circle { width: 90px; height: 90px; border: 6px solid; border-radius: 50%; margin: 10px auto; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-            .apdex-val { font-size: 28px; font-weight: 800; }
-            
-            .load-bar { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 25px; }
-            .load-item { padding: 22px; border-right: 1px solid var(--border); }
-            .l-val { font-size: 26px; font-weight: 700; color: #f0f6fc; display: block; }
-            .l-lbl { font-size: 11px; color: var(--gray); }
-
-            .main-chart-container { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 25px; height: 420px; margin-bottom: 25px; }
-            .perf-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
-            
-            .bar-row { display: flex; align-items: center; margin-bottom: 8px; }
-            .bar-label { width: 45px; font-size: 11px; color: var(--gray); font-family: monospace; }
-            .bar-bg { flex-grow: 1; background: #21262d; height: 18px; border-radius: 3px; position: relative; margin-left: 10px; }
-            .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-            .bar-text { position: absolute; right: 8px; top: 1px; font-weight: 700; font-size: 11px; color: white; }
-
-            .donut-wrapper { position: relative; height: 160px; width: 160px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
-            .donut-text { position: absolute; text-align: center; pointer-events: none; }
-            .donut-text .count { font-size: 22px; font-weight: 800; color: #ffffff; display: block; }
-            
-            .url-table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 10px;}
-            .url-table th { background: rgba(255,255,255,0.03); text-align: left; padding: 15px; font-size: 11px; color: var(--gray); }
-            .url-table td { padding: 18px 15px; border-bottom: 1px solid #21262d; }
-            .badge-success { background: rgba(57, 211, 83, 0.12); color: var(--cyan); border: 1px solid rgba(57, 211, 83, 0.2); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 11px; }
+            body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; }
+            .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; height: 100%; }
+            .label-title { font-size: 11px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.1em; }
+            .mono { font-family: 'JetBrains Mono', monospace; }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <div class="qa-header">
-                <div class="qa-info">
-                    <h1><span style="color:var(--cyan)">●</span> OVERVIEW LOAD TEST QA</h1>
-                    <p>Project: <strong>SauceDemo Baseline</strong> | Target: <span style="color:var(--blue)">${targetUrl}</span></p>
-                </div>
-                <div class="qa-badges">
-                    <div class="badge-item"><span class="badge-label">ENVIRONMENT</span><span class="badge-val">QA / STAGING</span></div>
-                    <div class="badge-item"><span class="badge-label">TEST EXECUTED</span><span class="badge-val">${testTimestamp}</span></div>
-                    <div class="badge-item"><span class="badge-label">DURATION</span><span class="badge-val">${Math.floor(duration)}s</span></div>
-                </div>
+    <body class="p-8 space-y-6">
+
+        <header class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white">QA</div>
+                <h1 class="text-white font-extrabold text-xl tracking-tight uppercase">QA Load Test Reporting <span class="text-blue-500">Local</span></h1>
             </div>
+        </header>
 
-            <div class="top-grid">
-                <div class="card">
-                    <div class="sec-title" style="margin-top:0">Checks <span>ⓘ</span></div>
-                    <div style="font-family:monospace; font-size:14px; line-height:2;">
-                        <div style="color:${checkP99.c}">${checkP99.s} p99 < 300ms <span style="color:var(--gray); font-size:11px">(${realP99}ms)</span></div>
-                        <div style="color:${checkP95.c}">${checkP95.s} p95 < 150ms <span style="color:var(--gray); font-size:11px">(${realP95}ms)</span></div>
+        <div class="grid grid-cols-4 gap-6">
+            <div class="card p-6">
+                <p class="label-title mb-4">Checks</p>
+                <div class="space-y-3">
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] text-black font-bold">✓</div>
+                            <span class="text-emerald-400 text-[11px] font-bold mono">page.codes.200</span>
+                        </div>
+                        <span class="text-white font-bold text-xs">${successReq}</span>
                     </div>
-                </div>
-
-                <div class="card" style="text-align:center">
-                    <div class="sec-title" style="margin-top:0; justify-content:center">Apdex <span>ⓘ</span></div>
-                    <div class="apdex-circle" style="border-color:${apdexColor}">
-                        <span class="apdex-val" style="color:${apdexColor}">${apdexScore}</span>
-                        <span style="font-size:10px; font-weight:700; color:${apdexColor}">${apdexRating.toUpperCase()}</span>
-                    </div>
-                </div>
-
-                <div class="card" style="text-align:center">
-                    <div class="sec-title" style="margin-top:0; justify-content:center">Errors <span>ⓘ</span></div>
-                    <div style="margin-top:10px;">
-                        <span style="font-size:32px; font-weight:800; color:${vFailed > 0 ? 'var(--red)' : 'var(--cyan)'}">${vFailed}</span><br>
-                        <span style="font-size:11px; color:var(--gray)">failed virtual users</span>
+                    <div class="px-1 flex justify-between text-[10px] font-bold uppercase">
+                        <span class="text-zinc-500">Success Rate</span>
+                        <span class="${reqSuccessPercent < 100 ? 'text-orange-400' : 'text-emerald-500'}">${reqSuccessPercent}%</span>
                     </div>
                 </div>
             </div>
 
-            <div class="sec-title">Load summary <span>ⓘ</span></div>
-            <div class="load-bar">
-                <div class="load-item"><span class="l-val">${vCreated}</span><span class="l-lbl">vusers created</span></div>
-                <div class="load-item">
-                    <div style="display:flex; justify-content:space-between"><span class="l-val">${vCompleted} completed</span><span style="font-weight:700">${vCreated > 0 ? Math.round((vCompleted/vCreated)*100) : 0}%</span></div>
-                    <div style="background:#30363d; height:5px; margin:10px 0; border-radius:3px;"><div style="width:${vCreated > 0 ? (vCompleted/vCreated)*100 : 0}%; background:var(--green); height:100%"></div></div>
+            <div class="card p-6 flex flex-col items-center justify-center">
+                <p class="label-title self-start mb-4">Apdex</p>
+                <div class="relative flex items-center justify-center mb-2">
+                    <svg class="w-24 h-24 transform -rotate-90">
+                        <circle cx="48" cy="48" r="40" stroke="#21262d" stroke-width="6" fill="transparent" />
+                        <circle cx="48" cy="48" r="40" stroke="currentColor" class="${apdexStroke}" stroke-width="6" fill="transparent" stroke-dasharray="251" stroke-dashoffset="${251 - (251 * apdexScore / 100)}" stroke-linecap="round" />
+                    </svg>
+                    <span class="absolute text-2xl font-black text-white">${apdexScore}</span>
                 </div>
-                <div class="load-item"><span class="l-val">${(totalRequests / duration).toFixed(1)}</span><span class="l-lbl">average req/s</span></div>
-                <div class="load-item"><span class="l-val">${realP95}ms</span><span class="l-lbl">p95 latency</span></div>
+                <p class="text-[10px] font-bold uppercase tracking-widest ${apdexColor}">${apdexStatus}</p>
             </div>
 
-            <div class="sec-title">Performance metrics <span>ⓘ</span></div>
-            <div class="main-chart-container">
-                <canvas id="mainChart"></canvas>
+            <div class="card p-6">
+                <p class="label-title mb-3">Errors</p>
+                <div class="space-y-1 max-h-[100px] overflow-y-auto">
+                    ${errors.length > 0 ? errors.map(e => `
+                        <div class="flex justify-between text-[10px] mono text-red-400 border-b border-zinc-800 pb-1">
+                            <span class="truncate pr-2">${e.name}</span><b>${e.count}</b>
+                        </div>
+                    `).join('') : '<p class="text-zinc-600 italic text-[10px] text-center mt-6">Clean run, no errors.</p>'}
+                </div>
             </div>
 
-            <div class="sec-title">HTTP performance <span>ⓘ</span></div>
-            <div class="perf-grid">
-                <div class="card">
-                    <div style="font-size:11px; color:var(--gray); margin-bottom:20px; font-weight:600">Response time distribution</div>
-                    ${['min', 'mean', 'p50', 'p95', 'p99', 'max'].map(m => {
-                        const val = fcpData[m] || 0;
-                        const w = Math.min((val / (fcpData.max || 1)) * 100, 100);
-                        return `<div class="bar-row"><div class="bar-label">${m}</div><div class="bar-bg"><div class="bar-fill" style="width:${w}%; background:var(--cyan)"></div><span class="bar-text">${val}ms</span></div></div>`
-                    }).join('')}
+            <div class="card p-6">
+                <p class="label-title mb-4">Metadata</p>
+                <div class="text-[11px] space-y-3 text-zinc-400">
+                    <div class="flex justify-between"><span>Date</span><span class="text-white">${new Date().toLocaleDateString()}</span></div>
+                    <div class="flex justify-between"><span>Duration</span><span class="text-white">${Math.floor(durationSec/60)}m ${durationSec%60}s</span></div>
+                    <div class="flex justify-between"><span>Total VU</span><span class="text-white">${vCreated}</span></div>
                 </div>
-                <div class="card" style="text-align:center">
-                    <div style="font-size:11px; color:var(--gray); text-align:left; font-weight:600; margin-bottom:15px">HTTP codes</div>
-                    <div class="donut-wrapper">
-                        <canvas id="donutChart"></canvas>
-                        <div class="donut-text">
-                            <span class="count">${totalRequests}</span>
-                            <span class="label">requests</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-9 card p-8">
+                <p class="label-title mb-8">Load Summary</p>
+                
+                <div class="grid grid-cols-4 gap-0 mb-12 border-b border-zinc-800 pb-8">
+                    <div class="text-center border-r border-zinc-800">
+                        <p class="text-4xl font-black text-white">${vCreated}</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase tracking-tighter">vusers created</p>
+                    </div>
+                    
+                    <div class="px-8 border-r border-zinc-800">
+                        <div class="flex justify-between items-end mb-2">
+                            <p class="text-xl font-bold text-white">${vCompleted} <span class="text-xs font-normal text-zinc-500 italic">completed</span></p>
+                            <span class="text-[10px] font-bold text-blue-400">${completedPercent}%</span>
+                        </div>
+                        <div class="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full shadow-[0_0_10px_rgba(59,130,246,0.4)]" style="width: ${completedPercent}%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <p class="text-[10px] text-zinc-500 font-mono">${vFailed} failed</p>
+                            <p class="text-[10px] text-red-400 font-mono">${failedPercent}%</p>
                         </div>
                     </div>
+
+                    <div class="text-center border-r border-zinc-800">
+                        <p class="text-4xl font-black text-white">${avgRps}</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase">avg req/s</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl font-black text-white">${peakRps}</p>
+                        <p class="text-[10px] text-zinc-500 font-bold mt-2 uppercase">peak req/s</p>
+                    </div>
                 </div>
+
+                <div id="mainChart" class="w-full"></div>
             </div>
 
-            <div class="sec-title">Requests breakdown by URL <span>ⓘ</span></div>
-            <table class="url-table">
-                <thead><tr><th>URL</th><th>STATUS</th><th>TOTAL</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td style="color:var(--blue); font-weight:700; font-size:14px;">/ (root)</td>
-                        <td><span class="badge-success">200 OK</span></td>
-                        <td style="font-weight:800; font-size:15px;">${totalRequests.toLocaleString()}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-span-3 card p-6">
+                <p class="label-title mb-6">Test Config</p>
+                <div class="bg-black/40 rounded-lg p-4 border border-zinc-800 overflow-hidden h-[500px]">
+                    <pre class="text-[10px] text-blue-300 mono whitespace-pre-wrap leading-relaxed h-full overflow-y-auto">${yamlSource.replace(/</g, "&lt;")}</pre>
+                </div>
+            </div>
         </div>
 
         <script>
-            // Main Chart
-            new Chart(document.getElementById('mainChart').getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: ${JSON.stringify(labels)},
-                    datasets: [
-                        { label: 'VUs', data: ${JSON.stringify(vUsersSeries)}, borderColor: '#ab7df8', backgroundColor: 'rgba(171, 125, 248, 0.05)', fill: true, tension: 0.4, borderWidth: 3 },
-                        { label: 'p95 Latency', data: ${JSON.stringify(p95Series)}, borderColor: '#58a6ff', tension: 0.4, borderWidth: 2 }
-                    ]
+            new ApexCharts(document.querySelector("#mainChart"), {
+                series: [
+                    { name: 'VUsers', type: 'area', data: ${JSON.stringify(vUsersSeries)} },
+                    { name: 'P95 Latency', type: 'line', data: ${JSON.stringify(latencySeries)} }
+                ],
+                chart: { height: 380, type: 'line', toolbar: { show: false }, background: 'transparent' },
+                colors: ['#e3b341', '#3b82f6'],
+                stroke: { width: [2, 3], curve: 'smooth' },
+                xaxis: { 
+                    categories: ${JSON.stringify(labels)}, 
+                    labels: { style: { colors: '#6b7280', fontSize: '10px' } }
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#8b949e', usePointStyle: true } } },
-                    scales: {
-                        y: { grid: { color: '#21262d' }, ticks: { color: '#8b949e' } },
-                        x: { grid: { display: false }, ticks: { color: '#8b949e' } }
-                    }
-                }
-            });
-
-            // Donut Chart
-            new Chart(document.getElementById('donutChart').getContext('2d'), {
-                type: 'doughnut',
-                data: { datasets: [{ data: [${totalRequests}], backgroundColor: ['#39d353'], borderWidth: 0 }] },
-                options: { cutout: '80%', plugins: { tooltip: { enabled: false } } }
-            });
+                yaxis: [
+                    { labels: { style: { colors: '#e3b341' } }, title: { text: 'VUsers' } },
+                    { opposite: true, labels: { style: { colors: '#3b82f6' } }, title: { text: 'Latency (ms)' } }
+                ],
+                grid: { borderColor: '#1f2937' },
+                theme: { mode: 'dark' }
+            }).render();
         </script>
     </body>
     </html>
     `;
 
-    fs.writeFileSync('my-report.html', htmlContent);
-    console.log('\x1b[36m%s\x1b[0m', '✨ MASTERPIECE CREATED: Check the "TEST EXECUTED" field now!');
-} catch (e) { console.log("Error logic: " + e.message); }
+    fs.writeFileSync('performance-report.html', htmlContent);
+    console.log('✅ BERHASIL! Report sudah jujur sesuai data terminal.');
+} catch (e) {
+    console.error('❌ Error:', e.message);
+}

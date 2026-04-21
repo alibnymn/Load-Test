@@ -1,0 +1,36 @@
+config:
+  target: "http://192.168.0.14:33000"
+  
+  plugins:
+    apdex: {}
+    ensure: {}
+
+  apdex:
+    threshold: 200 
+    metrics:
+      - "http.response_time"
+
+  ensure:
+    thresholds:
+      - "http.response_time.p99 < 3000"
+      - "http.response_time.p95 < 2500"
+      - "apdex.score >= 0.90"
+    conditions:
+      - expression: "http.codes.200 == http.requests" 
+
+  phases:
+    - duration: 40
+      arrivalRate: 5
+      name: "Normal Mode (Baseline)"
+    - duration: 70
+      arrivalRate: 5
+      rampTo: 25
+      name: "Beban Test (Stress Mode)"
+
+scenarios:
+  - name: "Get Kadar Data"
+    flow:
+      - get:
+          url: "/api/HashtagCatalog/get"
+          headers:
+            api_key: "6e86cbd45483ef26a346d7f5e7982caf2a16bc81"
